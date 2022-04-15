@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todo_app/src/models/task_response.dart';
 
 class TaskFormProvider extends ChangeNotifier {
-  GlobalKey formKey = GlobalKey();
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   TasksResponse task;
   TaskFormProvider(this.task);
@@ -12,7 +12,7 @@ class TaskFormProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // bool isValidForm() {
-  //   return formKey.currentState?.validate() ?? false;
-  // }
+  bool isValidForm() {
+    return formKey.currentState?.validate() ?? false;
+  }
 }

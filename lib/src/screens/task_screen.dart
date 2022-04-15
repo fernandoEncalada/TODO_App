@@ -27,12 +27,24 @@ class _TaskScreenBody extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create Task'),
+        title: const Text('Task'),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [_TaskForm()],
         ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndDocked,
+      floatingActionButton: FloatingActionButton(
+        child: taskProvider.isSaving
+            ? const CircularProgressIndicator(color: Colors.white,)
+            : const Icon(Icons.save_outlined, color: Colors.white,),
+        onPressed: taskProvider.isSaving
+            ? null
+            : () async {
+                if (!taskForm.isValidForm()) return;
+                await taskProvider.createOrUpdateTask(taskForm.task);
+              },
       ),
     );
   }
@@ -45,7 +57,7 @@ class _TaskForm extends StatelessWidget {
     final task = taskForm.task;
 
     return Container(
-      margin: EdgeInsets.only(top: 30),
+      margin: const EdgeInsets.only(top: 30),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Container(
@@ -57,30 +69,38 @@ class _TaskForm extends StatelessWidget {
               autovalidateMode: AutovalidateMode.onUserInteraction,
               child: Column(
                 children: [
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   TextFormField(
+                    style: const TextStyle(color: Colors.black),
                     initialValue: task.title,
                     onChanged: (value) => task.title = value,
                     validator: (value) {
-                      if (value == null || value.isEmpty)
+                      if (value == null || value.isEmpty) {
                         return 'The name is required';
+                      }
                     },
-                    decoration: InputDecorations.authInputDecoration(hintText: 'Task Title', labelText: 'Title'),
+                    decoration: InputDecorations.authInputDecoration(
+                        hintText: 'Task Title', labelText: 'Title'),
                   ),
 
                   TextFormField(
+                    style: const TextStyle(color: Colors.black),
+                    maxLines: 6,
                     initialValue: task.description,
                     onChanged: (value) => task.description = value,
                     validator: (value) {
-                      if (value == null || value.isEmpty)
+                      if (value == null || value.isEmpty) {
                         return 'The description is required';
+                      }
                     },
-                    decoration: InputDecorations.authInputDecoration(hintText: 'Task Descriptions', labelText: 'Description'),
+                    decoration: InputDecorations.authInputDecoration(
+                        hintText: 'Task Descriptions',
+                        labelText: 'Description'),
                   ),
                   SwitchListTile.adaptive(
-                    value: task.completed,
-                    activeColor: Colors.indigo,
-                    onChanged: taskForm.updateCompleted)
+                      value: task.completed,
+                      activeColor: Colors.indigo,
+                      onChanged: taskForm.updateCompleted)
                 ],
               )),
         ),
@@ -90,13 +110,13 @@ class _TaskForm extends StatelessWidget {
 
   BoxDecoration _buildBoxDecoration() => BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
               bottomRight: Radius.circular(25),
               bottomLeft: Radius.circular(25)),
           boxShadow: [
             BoxShadow(
                 color: Colors.black12.withOpacity(0.05),
-                offset: Offset(0, 5),
+                offset: const Offset(0, 5),
                 blurRadius: 5)
           ]);
 }

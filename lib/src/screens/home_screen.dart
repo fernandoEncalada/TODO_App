@@ -12,16 +12,16 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text('TODO APP'),
+          title: const Text('TODO APP'),
           elevation: 0,
           actions: [
             IconButton(
               onPressed: () {
-                tasksProvider.selectedTask = TasksResponse(
-                    completed: false, description: 'huevos', title: 'jeje');
+                tasksProvider.selectedTask =
+                    TasksResponse(completed: false, description: '', title: '');
                 Navigator.pushNamed(context, 'task');
-              }, 
-              icon: Icon(Icons.add),
+              },
+              icon: const Icon(Icons.add),
             ),
           ],
         ),
@@ -43,24 +43,34 @@ class _TasksList extends StatelessWidget {
     final taskProvider = Provider.of<TaskProvider>(context);
     return Container(
         margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-        height: 70,
+        height: 80,
         width: double.infinity,
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(40)),
         child: Card(
-            color: (task.completed) ? Colors.green : Colors.red,
+            color: (task.completed) ? Colors.green.shade300 : Colors.red.shade300,
             child: GestureDetector(
               onTap: () {
-                
-                Navigator.pushNamed(context, 'details');
+                taskProvider.selectedTask = task.copy();
+                Navigator.pushNamed(context, 'task');
               },
               child: Column(
                 children: [
-                  SizedBox(height: 10),
-                  Text(task.title,
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                  Text(task.description),
-                  SizedBox(height: 10),
+                  ListTile(
+                    title: Text(task.title,
+                        style: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold)),
+                    subtitle: Text(task.description,
+                        style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            overflow: TextOverflow.ellipsis)),
+                    trailing: IconButton(
+                        onPressed: () {
+                          taskProvider.deleteTask(task);
+                        },
+                        icon: const Icon(Icons.delete),
+                    ),
+                  ),
                 ],
               ),
             )));

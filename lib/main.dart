@@ -5,7 +5,7 @@ import 'package:todo_app/src/screens/details_screen.dart';
 import 'package:todo_app/src/screens/home_screen.dart';
 import 'package:todo_app/src/screens/task_screen.dart';
 
-void main() => runApp(AppState());
+void main() => runApp(const AppState());
 
 class AppState extends StatelessWidget {
   const AppState({Key? key}) : super(key: key);
@@ -16,7 +16,7 @@ class AppState extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => TaskProvider()),
       ],
-      child: MyApp(),
+      child: const MyApp(),
     );
   }
 }
@@ -31,9 +31,9 @@ class MyApp extends StatelessWidget {
       title: 'TODO',
       initialRoute: 'home',
       routes: {
-        'home': (_) => HomeScreen(),
+        'home': (_) => const HomeScreen(),
         'task': (_) => TaskScreen(),
-        'details': (_) => DetailsScreen(),
+        'details': (_) => const DetailsScreen(),
       },
       theme: ThemeData.dark().copyWith(
         appBarTheme: const AppBarTheme(color: Colors.indigo),
